@@ -1,12 +1,12 @@
 #ifndef GET_NEXT_LINE_H
-#define GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-#ifndef BUFFER_SIZE
-#define BUFFER_SIZE 256
-#endif
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 256
+# endif
 
-#include <unistd.h>
-#include <stdlib.h>
+# include <stdlib.h>
+# include <unistd.h>
 
 int		ft_strlen(char *s);
 int		ft_strchr(char *s, int c);
