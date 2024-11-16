@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ihalim <ihalim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/08 09:22:46 by ihalim            #+#    #+#             */
+/*   Updated: 2024/11/15 10:45:11 by ihalim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 int	ft_strlen(char *s)
@@ -24,29 +36,45 @@ int	ft_strchr(char *s, int c)
 	return (0);
 }
 
+char	*ft_strcpy(char *dst, const char *src)
+{
+	size_t	i;
+
+	i = 0;
+	while (src[i])
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (dst);
+}
+
 char	*ft_strjoin(char *leftovers, char *buffer)
 {
-	int		i;
-	int		j;
 	char	*str;
+	int		leftovers_len;
+	int		buffer_len;
 
+	if (buffer == NULL)
+		return (NULL);
 	if (!leftovers)
 	{
 		leftovers = (char *)malloc(1);
+		if (!leftovers)
+			return (NULL);
 		leftovers[0] = '\0';
 	}
-	if (leftovers == NULL || buffer == NULL)
-		return (NULL);
-	str = (char *)malloc(ft_strlen(leftovers) + ft_strlen(buffer) + 1);
+	leftovers_len = ft_strlen(leftovers);
+	buffer_len = ft_strlen(buffer);
+	str = (char *)malloc(leftovers_len + buffer_len + 1);
 	if (str == NULL)
+	{
+		free(leftovers);
 		return (NULL);
-	i = -1;
-	while (leftovers[++i] != '\0')
-		str[i] = leftovers[i];
-	j = 0;
-	while (buffer[j])
-		str[i++] = buffer[j++];
-	str[ft_strlen(leftovers) + ft_strlen(buffer)] = '\0';
+	}
+	ft_strcpy(str, leftovers);
+	ft_strcpy(str + leftovers_len, buffer);
 	free(leftovers);
 	return (str);
 }

@@ -1,57 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ihalim <ihalim@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/08 09:22:49 by ihalim            #+#    #+#             */
+/*   Updated: 2024/11/15 10:33:17 by ihalim           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
-
-char	*find_leftovers(int fd, char *leftovers)
-{
-	char	*buffer;
-	int		bytes_read;
-
-	buffer = (char *)malloc(BUFFER_SIZE + 1);
-	if (!buffer)
-		return (NULL);
-	bytes_read = 1;
-	while (bytes_read != 0 && (!leftovers || !ft_strchr(leftovers, '\n')))
-	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read == -1)
-		{
-			free(leftovers);
-			free(buffer);
-			return (NULL);
-		}
-		buffer[bytes_read] = '\0';
-		leftovers = ft_strjoin(leftovers, buffer);
-	}
-	free(buffer);
-	return (leftovers);
-}
-
-char	*find_line(char *leftovers)
-{
-	int		i;
-	char	*line;
-
-	if (!leftovers[0])
-		return (NULL);
-	i = 0;
-	while (leftovers[i] && leftovers[i] != '\n')
-		i++;
-	line = (char *)malloc(sizeof(char) * (i + 2));
-	if (line == NULL)
-		return (NULL);
-	i = 0;
-	while (leftovers[i] && leftovers[i] != '\n')
-	{
-		line[i] = leftovers[i];
-		i++;
-	}
-	if (leftovers[i] == '\n')
-	{
-		line[i] = leftovers[i];
-		i++;
-	}
-	line[i] = '\0';
-	return (line);
-}
 
 char	*find_next_leftovers(char *leftovers)
 {
@@ -77,6 +36,60 @@ char	*find_next_leftovers(char *leftovers)
 	str[j] = '\0';
 	free(leftovers);
 	return (str);
+}
+
+char	*find_line(char *leftovers)
+{
+	int		i;
+	char	*line;
+
+	if (!leftovers[0])
+		return (NULL);
+	i = 0;
+	while (leftovers[i] && leftovers[i] != '\n')
+		i++;
+	line = (char *)malloc(sizeof(char)
+			* (i + 2 * (leftovers[i] == '\n') + 1 * (leftovers[i] != '\n')));
+	if (line == NULL)
+		return (NULL);
+	i = 0;
+	while (leftovers[i] && leftovers[i] != '\n')
+	{
+		line[i] = leftovers[i];
+		i++;
+	}
+	if (leftovers[i] == '\n')
+	{
+		line[i] = leftovers[i];
+		i++;
+	}
+	line[i] = '\0';
+	return (line);
+}
+
+char	*find_leftovers(int fd, char *leftovers)
+{
+	char	*buffer;
+	int		bytes_read;
+
+	buffer = (char *)malloc(BUFFER_SIZE + 1);
+	if (!buffer)
+		return (NULL);
+	bytes_read = 1;
+	while (bytes_read != 0 && (!leftovers || !ft_strchr(leftovers, '\n')))
+	{
+		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read == -1)
+		{
+			free(leftovers);
+			free(buffer);
+			return (NULL);
+		}
+		buffer[bytes_read] = '\0';
+		leftovers = ft_strjoin(leftovers, buffer);
+	}
+	free(buffer);
+	return (leftovers);
 }
 
 char	*get_next_line(int fd)
