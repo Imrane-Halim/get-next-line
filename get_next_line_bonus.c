@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ihalim <ihalim@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 09:22:49 by ihalim            #+#    #+#             */
-/*   Updated: 2024/11/16 10:52:32 by ihalim           ###   ########.fr       */
+/*   Updated: 2024/11/16 14:55:34 by ihalim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*find_next_leftovers(char *leftovers)
 {
@@ -90,15 +90,15 @@ char	*find_leftovers(int fd, char *leftovers)
 
 char	*get_next_line(int fd)
 {
-	static char	*leftovers = 0;
+	static char	*leftovers[FD_MAX];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	leftovers = find_leftovers(fd, leftovers);
-	if (leftovers == NULL)
+	leftovers[fd] = find_leftovers(fd, leftovers[fd]);
+	if (leftovers[fd] == NULL)
 		return (NULL);
-	line = find_line(leftovers);
-	leftovers = find_next_leftovers(leftovers);
+	line = find_line(leftovers[fd]);
+	leftovers[fd] = find_next_leftovers(leftovers[fd]);
 	return (line);
 }
